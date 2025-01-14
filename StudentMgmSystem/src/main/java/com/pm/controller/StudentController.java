@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/stud")
@@ -24,11 +25,19 @@ public class StudentController {
     @PostMapping("/save")
     public ResponseEntity<?> saveStudent(@RequestBody Student student){
     	String msg="";
+    	if (Optional.ofNullable(student.getStudName()).orElse("").isEmpty() 
+    	        || Optional.ofNullable(student.getStudEmail()).orElse("").isEmpty() 
+    	        || Optional.ofNullable(student.getStudAddr()).orElse("").isEmpty() 
+    	        || Optional.ofNullable(student.getStudMob()).orElse("").isEmpty()) {
+    	    msg = "Please Provide all the Data of Student.";
+    	}
+else {
     	boolean status=studentService.validateStudentInfo(student);
     	if(status)
     		msg=studentService.saveStudent(student);
     	else
     		msg="Email  should not be duplicate";
+    	}
         return ResponseEntity.ok(msg);
 
     }
@@ -42,12 +51,19 @@ public class StudentController {
     @PutMapping("/update")
     public ResponseEntity<?> updateStudent(@RequestBody Student student){
     	String msg="";
+    	if (Optional.ofNullable(student.getStudName()).orElse("").isEmpty() 
+    	        || Optional.ofNullable(student.getStudEmail()).orElse("").isEmpty() 
+    	        || Optional.ofNullable(student.getStudAddr()).orElse("").isEmpty() 
+    	        || Optional.ofNullable(student.getStudMob()).orElse("").isEmpty()) {
+    	    msg = "Please Provide all the Data of Student.";
+    	}else {
     	boolean status=studentService.validateStudentInfo(student);
     	if(status)
     		msg=studentService.updateStudent(student);
     	else
     		msg="Enmail should not be Duplicate";
-        return ResponseEntity.ok(msg);
+    	}
+    	return ResponseEntity.ok(msg);
 
     }
  
